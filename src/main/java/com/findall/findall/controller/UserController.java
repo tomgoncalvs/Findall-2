@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,9 +24,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
+    // Método para buscar um usuário pelo ID
     @GetMapping("/{id}")
     public ResponseEntity<User> buscarPorId(@PathVariable Long id) {
         Optional<User> user = userRepository.findById(id);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Método para listar todos os usuários
+    @GetMapping
+    public ResponseEntity<List<User>> listarTodos() {
+        List<User> users = userRepository.findAll();
+        return ResponseEntity.ok(users);
     }
 }
