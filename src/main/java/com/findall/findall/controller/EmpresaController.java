@@ -36,4 +36,16 @@ public class EmpresaController {
         Optional<Empresa> empresa = empresaRepository.findById(id);
         return empresa.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/nome")
+    public ResponseEntity<List<Empresa>> buscarPorNome(@RequestParam String nome) {
+        List<Empresa> empresas = empresaRepository.findByNomeCompletoContaining(nome);
+        return ResponseEntity.ok(empresas);
+    }
+
+    @GetMapping("/dia")
+    public ResponseEntity<List<Empresa>> buscarPorDiaDisponivel(@RequestParam String dia) {
+        List<Empresa> empresas = empresaRepository.findByDiaDisponivel(dia);
+        return ResponseEntity.ok(empresas);
+    }
 }
